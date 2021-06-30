@@ -1,0 +1,1 @@
+neotermcolor>=2.0

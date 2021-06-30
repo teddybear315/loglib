@@ -1,15 +1,16 @@
 from neotermcolor import cprint
 from datetime import *
-import sys
-__version__ = "1.0.0"
+import sys, os
+__version__ = "1.1.0"
 __author__ = 'Logan Houston'
 class Logger:
     # flags in order of bit placement, LTR
     # ex: 0b1010 =
     # verbose = True, whitespace = False, channels = True, 256 = False
+    use_file = False
     verbose = False # prints all unseen modifiable variables
-    use_whitespace = False
-    use_channels = False
+    use_whitespace = True
+    use_channels = True
     use_256 = False
     # end flags
 
@@ -20,10 +21,19 @@ class Logger:
     flags = 0
 
     def __init__(self, use_256 = False, use_channels = False, use_whitespace =
-                False, flags = 0):
+                False, use_file = False, file_dir = "./logs/", file_type = ".log", file_name = "%Y-%m-%d %H-%M-%S", flags = 0):
                 # Decent logging system that has a few options
                 # If you experience compatibility issues please try toggling use_256 either via flags or args
-                # flag bits in order of: verbose, use_whitespace, use_channels, use_256
+                #
+                # Keyword arguments: ('use_*' == type(bool) and default False)
+                # use_256 -- use 256 color palette instead of 16
+                # use_channels -- use different output channels
+                # use_whitespace -- use whitespace between log parameters
+                # use_file -- use output file ('file_*' required if use_file == True)
+                #   file_dir -- path to log folder (default: './logs/')
+                #   file_type -- type of log file, doesnt change contents (default: '.log')
+                #   file_name -- name of log file, passed through datetime.datetime.now().strftime() (default: '%Y-%m-%d %H-%M-%S')
+                # flags -- shorter way to set options, reverse order of parameters (default: 0)
         if flags:
             self.flags = flags
             if flags & 1 == 1: self.use_256 = True
@@ -32,11 +42,18 @@ class Logger:
             if flags & 8 == 8:
                 self.verbose = True
                 print("Logger setup flags:", f"{self.use_256=}", f"{self.use_channels=}", f"{self.use_whitespace=}")
+            if flags & 16 == 16:
+                self.use_file = True
         else:
             self.use_256 = use_256
             self.use_channels = use_channels
             self.use_whitespace = use_whitespace
+            self.use_file = use_file
             self.flags = self._generate_flags()
+        if self.use_file:
+            self.log_path = os.abspath(file_dir) + datetime.now().strftime(file_name) + file_type
+            self.log_file = open(self.log_path, "a+")
+            self.file_name = file_name
 
 
     def log(self, message: str, lvl: str = "LOG", timestamp: datetime = None, nt_attrs =
@@ -51,6 +68,7 @@ class Logger:
             print("Logger print args:", f"{nt_attrs=}", f"{prefix=}", f"{channel=}",
                    f"color={self.levels[lvl.upper()][int(self.use_256)]}")
         cprint(f"[{lvl}]"+message, self.levels[lvl.upper()][int(self.use_256)], attrs=nt_attrs)
+        if self.use_file: self.log_file.write(f"[{lvl}]"+message)
 
     def err(self, message: str, timestamp: datetime = None, nt_attrs =
             [], prefix = "", prefixes = [], channel = DEFAULT_CHANNEL): # Shorthand function for predefined logging levels
@@ -101,3 +119,4 @@ class Logger:
         return color_tuple
 
 def _bis(boolean) -> str: return str(int(boolean))
+l = Logger(use_whitespace=True, use_channels=True)

@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: loglib
+Version: 1.1.0
+Summary: A decent logging system with some settings built in
+Home-page: https://github.com/teddybear315/loglib
+Author: Logan Houston
+Author-email: logan.houston4509@gmail.com
+License: Free Domain
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# loglib
+
+---
+
+Simple logging library made by Logan Houston for YLCB
+Should work out of the box
+
+

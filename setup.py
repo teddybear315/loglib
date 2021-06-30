@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='loglib',
-    version='1.1.0',
+    version='1.1.1',
     description='A decent logging system with some settings built in',
     url='https://github.com/teddybear315/loglib',
     author='Logan Houston',

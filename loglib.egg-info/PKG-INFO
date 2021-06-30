@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: loglib
-Version: 1.1.0
+Version: 1.1.1
 Summary: A decent logging system with some settings built in
 Home-page: https://github.com/teddybear315/loglib
 Author: Logan Houston
@@ -16,6 +16,7 @@ License-File: LICENSE
 ---
 
 Simple logging library made by Logan Houston for YLCB
+
 Should work out of the box
 
 

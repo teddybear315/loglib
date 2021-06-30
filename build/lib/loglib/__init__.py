@@ -1,7 +1,8 @@
 from neotermcolor import cprint
 from datetime import *
-import sys, os
-__version__ = "1.1.0"
+from os import path
+import sys
+__version__ = "1.1.1"
 __author__ = 'Logan Houston'
 class Logger:
     # flags in order of bit placement, LTR
@@ -32,7 +33,7 @@ class Logger:
                 # use_file -- use output file ('file_*' required if use_file == True)
                 #   file_dir -- path to log folder (default: './logs/')
                 #   file_type -- type of log file, doesnt change contents (default: '.log')
-                #   file_name -- name of log file, passed through datetime.now().strftime() (default: '%Y-%m-%d %H-%M-%S')
+                #   file_name -- name of log file, passed through datetime.datetime.now().strftime() (default: '%Y-%m-%d %H-%M-%S')
                 # flags -- shorter way to set options, reverse order of parameters (default: 0)
         if flags:
             self.flags = flags
@@ -51,7 +52,7 @@ class Logger:
             self.use_file = use_file
             self.flags = self._generate_flags()
         if self.use_file:
-            self.log_path = os.abspath(file_dir) + datetime.now().strftime(file_name) + file_type
+            self.log_path = path.abspath(file_dir) + datetime.now().strftime(file_name) + file_type
             self.log_file = open(self.log_path, "a+")
             self.file_name = file_name
 
@@ -95,7 +96,7 @@ class Logger:
 
     def _generate_flags(self) -> int:
         # Returns flag int based on current settings
-        return self.use_256 + (self.use_channels*2) + (self.use_whitespace*4) + (self.verbose*8)
+        return self.use_256 + (self.use_channels*2) + (self.use_whitespace*4) + (self.verbose*8) + (self.use_file*16)
 
     def observe_channel(self, new_channel=0):
         # Send messages to custom channels so you dont have to see them all at once
